@@ -11,6 +11,7 @@ import (
 
 	pbaccount "github.com/PretendoNetwork/grpc/go/account"
 	pbfriends "github.com/PretendoNetwork/grpc/go/friends"
+	"github.com/PretendoNetwork/nex-go/v2"
 
 	"github.com/PretendoNetwork/plogger-go"
 	"github.com/PretendoNetwork/puyo-puyo-20th/globals"
@@ -41,6 +42,7 @@ func init() {
 	friendsGRPCAPIKey := os.Getenv("PN_PP20_FRIENDS_GRPC_API_KEY")
 	tokenAesKey := os.Getenv("PN_PP20_AES_KEY")
 	localAuthMode := os.Getenv("PN_PP20_LOCAL_AUTH")
+	healthCheckPort := os.Getenv("PN_PP20_HEALTH_CHECK_PORT")
 
 	kerberosPassword := make([]byte, 0x10)
 	_, err = rand.Read(kerberosPassword)
@@ -165,6 +167,18 @@ func init() {
 	if globals.LocalAuthMode {
 		globals.Logger.Warning("Local authentication mode is enabled. Token validation will be skipped!")
 		globals.Logger.Warning("This is insecure and could allow ban bypasses!")
+	}
+
+	if strings.TrimSpace(healthCheckPort) == "" {
+		globals.Logger.Warning("Basic UDP health check will not be enabled. PN_PP20_HEALTH_CHECK_PORT environment variable not set")
+	} else if port, err := strconv.Atoi(healthCheckPort); err != nil {
+		globals.Logger.Errorf("PN_PP20_HEALTH_CHECK_PORT is not a valid port. Expected 0-65535, got %s", healthCheckPort)
+		os.Exit(0)
+	} else if port < 0 || port > 65535 {
+		globals.Logger.Errorf("PN_PP20_HEALTH_CHECK_PORT is not a valid port. Expected 0-65535, got %s", healthCheckPort)
+		os.Exit(0)
+	} else {
+		nex.EnableBasicUDPHealthCheck(port)
 	}
 
 	globals.Postgres, err = sql.Open("postgres", os.Getenv("PN_PP20_POSTGRES_URI"))

@@ -55,3 +55,4 @@ All configuration options are handled via environment variables
 | `PN_PP20_FRIENDS_GRPC_API_KEY`       | API key for Friends gRPC service                                                                | No (Assumed to be an open gRPC API) |
 | `PN_PP20_AES_KEY`                    | Account server token validation key                                                             | Yes                                 |
 | `PN_PP20_LOCAL_AUTH`                 | Use local file for NEX credentials rather than talking to account server (INSECURE)             | No                                  |
+| `PN_PP20_HEALTH_CHECK_PORT`          | Port for the UDP health check                                                                   | No                                  |
