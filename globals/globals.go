@@ -35,5 +35,4 @@ var MatchmakingManager *common_globals.MatchmakingManager
 var StorageManagerManager *common_globals.StorageManagerManager
 var RankingManager *common_globals.RankingManager
 
-var TokenAESKey []byte
 var LocalAuthMode bool
