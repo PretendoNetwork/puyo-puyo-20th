@@ -38,7 +38,6 @@ func registerCommonAuthenticationServerProtocols() {
 			return nil
 		}
 	} else {
-		// TODO: re-enable once Legacy Ranking is rebased up to latest
-		// commonTicketGrantingProtocol.SetPretendoValidation(globals.TokenAESKey)
+		commonTicketGrantingProtocol.ConfigurePNValidation([]string{"00056600"})
 	}
 }
